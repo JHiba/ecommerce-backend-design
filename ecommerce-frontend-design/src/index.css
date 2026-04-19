@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-inter text-dark min-h-screen relative;
+    /* Soft pastel gradient background */
+    background: linear-gradient(135deg, #F8F4FF 0%, #E9F1F6 50%, #FAD0C9 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-[1180px] mx-auto px-4 relative z-10;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-5 py-2.5 rounded-full hover:bg-primary-dark transition-all duration-300 hover:shadow-soft hover:-translate-y-0.5 font-medium;
+  }
+  
+  .card {
+    /* Glassmorphism replacement for old basic cards */
+    @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-soft rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-glow hover:-translate-y-1;
+  }
+
+  .glass-header {
+    @apply sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-white/50 shadow-sm transition-all duration-300;
+  }
+
+  .pastel-input {
+    @apply bg-white/50 border border-shade-border/50 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all;
+  }
+}

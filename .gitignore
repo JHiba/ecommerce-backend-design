@@ -1,0 +1,5 @@
+node_modules/
+.env
+ecommerce-frontend-design/node_modules/
+ecommerce-frontend-design/dist/
+.DS_Store
