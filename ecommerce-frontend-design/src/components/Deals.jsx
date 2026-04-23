@@ -1,18 +1,21 @@
-import React from 'react';
 import watchImg from '../assets/Image/tech/8.png';
 import laptopImg from '../assets/Image/tech/image 23.png';
 import goproImg from '../assets/Image/tech/image 29.png';
 import headphonesImg from '../assets/Image/tech/image 34.png';
 import canonImg from '../assets/Image/tech/image 85.png';
+import React, { useState, useEffect } from 'react';
 
 const Deals = ({ setPage }) => {
-  const deals = [
-    { name: "Smart watches", discount: "-25%", image: watchImg },
-    { name: "Laptops", discount: "-15%", image: laptopImg },
-    { name: "GoPro cameras", discount: "-40%", image: goproImg },
-    { name: "Headphones", discount: "-25%", image: headphonesImg },
-    { name: "Canon cameras", discount: "-25%", image: canonImg },
-  ];
+  const [deals, setDeals] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/products?category=deal')
+      .then(res => res.json())
+      .then(data => setDeals(data.slice(0, 5)))
+      .catch(err => console.error("Error fetching deals:", err));
+  }, []);
+
+
 
   return (
     <section className="card mt-10 flex flex-col md:flex-row overflow-hidden border-none bg-white/70">
@@ -21,7 +24,7 @@ const Deals = ({ setPage }) => {
         <h3 className="text-2xl font-bold text-primary-dark mb-2">Flash Deals</h3>
         <p className="text-secondary mb-6 font-medium">Limited time offers</p>
         <div className="flex gap-3">
-          {['04', '13', '34', '56'].map((time, i) => (
+          {['02', '07', '21', '34'].map((time, i) => (
             <div key={i} className="w-12 h-14 bg-white rounded-lg flex flex-col items-center justify-center text-dark shadow-sm border border-white/60 backdrop-blur-sm hover:-translate-y-1 transition-transform">
               <span className="text-lg font-bold text-primary-dark">{time}</span>
               <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">

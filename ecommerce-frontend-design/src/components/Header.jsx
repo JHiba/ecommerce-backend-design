@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, User, MessageSquare, Heart, ShoppingCart, Menu, ChevronDown, LogIn } from 'lucide-react';
 import logo from '../assets/Layout/Brand/logo-colored.png';
-import flagDE from '../assets/Layout1/Image/flags/DE@2x.png';
 
-const Header = ({ setPage }) => {
+const Header = ({ setPage, setSearchQuery }) => {
+  // We use this to temporarily hold what the user is typing
+  const [localSearch, setLocalSearch] = useState('');
+
+  // When they click the magnifying glass, send it to App.jsx!
+  const handleSearchTrigger = () => {
+    if (setSearchQuery) {
+      setSearchQuery(localSearch);
+    }
+    setPage('listing');
+  };
+
+  // Allow them to just hit "Enter" on their keyboard
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchTrigger();
+    }
+  };
+
   return (
     <header className="glass-header">
       {/* Top Header - Restructured to be airy and modern */}
@@ -31,12 +48,15 @@ const Header = ({ setPage }) => {
           <div className="hidden md:flex rounded-full shadow-soft bg-white/60 backdrop-blur-md border border-white/50 p-1 w-64 hover:w-80 transition-all duration-500 group focus-within:w-80">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search products..."
               className="flex-1 bg-transparent px-4 py-1.5 outline-none text-dark text-sm"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={handleKeyPress}
             />
             <button
               className="bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-soft transition-all duration-300 hover:rotate-6 flex items-center justify-center cursor-pointer"
-              onClick={() => setPage('listing')}
+              onClick={handleSearchTrigger}
             >
               <Search size={16} strokeWidth={3} />
             </button>
@@ -61,4 +81,3 @@ const Header = ({ setPage }) => {
 };
 
 export default Header;
-

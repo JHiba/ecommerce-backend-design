@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Grid, List, ChevronDown, Star, Heart, X } from 'lucide-react';
 
 // Import images for products
@@ -10,111 +11,26 @@ import headphonesImg from '../assets/Image/tech/image 32.png';
 import phone1 from '../assets/Image/tech/image 33.png';
 import phone2 from '../assets/Image/tech/image 34.png';
 
-const ProductListing = ({ setPage }) => {
-  const [viewMode, setViewMode] = useState('grid'); // Default to grid as per new request
+const ProductListing = ({ setPage, searchQuery }) => {
+  const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState('grid'); 
+  const [products, setProducts] = useState([]); // This hooks into MongoDB!
 
-  const activeFilters = [
-    "Samsung", "Apple", "Poco", "Metallic", "4 star", "3 star"
-  ];
+  const activeFilters = ["Samsung", "Apple", "Poco", "Metallic", "4 star", "3 star"];
 
-  const products = [
-    {
-      id: 1,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      image: phone1
-    },
-    {
-      id: 2,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 5.9,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: phone2
-    },
-    {
-      id: 3,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: phone1
-    },
-    {
-      id: 4,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: laptopImg
-    },
-    {
-      id: 5,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: canonImg
-    },
-    {
-      id: 6,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: phone2
-    },
-    {
-      id: 7,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: laptopImg
-    },
-    {
-      id: 8,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      oldPrice: "1128.00",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: watchImg
-    },
-    {
-      id: 9,
-      title: "GoPro HERO6 4K Action Camera - Black",
-      price: "99.50",
-      rating: 7.5,
-      orders: 154,
-      shipping: "Free Shipping",
-      desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit",
-      image: canonImg
-    }
-  ];
+  // Fetch from the Database whenever the Search Bar changes!
+  useEffect(() => {
+    // If they typed something, use our new Search Route. Otherwise, get everything!
+    const url = searchQuery && searchQuery.trim() !== '' 
+      ? `http://localhost:3000/api/products/search?q=${searchQuery}`
+      : 'http://localhost:3000/api/products';
+      
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error(err));
+  }, [searchQuery]);
+
 
   return (
     <div className="container py-4">
@@ -289,7 +205,7 @@ const ProductListing = ({ setPage }) => {
             /* Product List View */
             <div className="space-y-4">
               {products.map((product) => (
-                <div key={product.id} className="card p-5 flex gap-6 hover:shadow-glow transition-all duration-300 group cursor-pointer relative border-white/60" onClick={() => setPage('details')}>
+                <div key={product._id} className="card p-5 flex gap-6 hover:shadow-glow transition-all duration-300 group cursor-pointer relative border-white/60" onClick={() => navigate(`/products/${product._id}`)}>
                   {/* Product Image area */}
                   <div className="w-[210px] h-[210px] lg:w-[240px] lg:h-[240px] flex-shrink-0 flex items-center justify-center bg-[#F7F7F7] rounded-lg p-6 relative overflow-hidden group">
                     <img src={product.image} alt={product.title} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-300" />
@@ -338,9 +254,9 @@ const ProductListing = ({ setPage }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
                 <div
-                  key={product.id}
+                  key={product._id}
                   className="card p-5 hover:shadow-glow hover:-translate-y-2 transition-all duration-500 group flex flex-col items-center cursor-pointer border-white/60"
-                  onClick={() => setPage('details')}
+                  onClick={() => navigate(`/products/${product._id}`)}
                 >
                   {/* Product Image Area */}
                   <div className="w-full aspect-square flex items-center justify-center mb-4 bg-[#F7F7F7] rounded-md p-6 overflow-hidden">
