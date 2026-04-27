@@ -23,9 +23,10 @@ mongoose.connect(process.env.MONGO_URI)
 // Serve static React files from public
 app.use(express.static(path.join(__dirname, "public")));
 
-// Define a simple API router for Week 2 extensions
 const apiRouter = require('./routes/api');
 app.use("/api", apiRouter);
+const authRoutes = require('./routes/auth');
+app.use("/api/auth", authRoutes);
 
 // For all other routes, serve the React app (SPA fallback)
 app.use((req, res, next) => {

@@ -11,7 +11,10 @@ const Deals = ({ setPage }) => {
   useEffect(() => {
     fetch('http://localhost:3000/api/products?category=deal')
       .then(res => res.json())
-      .then(data => setDeals(data.slice(0, 5)))
+      .then(data => {
+        const items = data.products || data;
+        setDeals(items.slice(0, 5));
+      })
       .catch(err => console.error("Error fetching deals:", err));
   }, []);
 

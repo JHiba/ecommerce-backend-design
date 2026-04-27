@@ -14,6 +14,7 @@ import Profile from './components/Profile';
 import Messages from './components/Messages';
 import Orders from './components/Orders';
 import Login from './components/Login';
+import Admin from './components/Admin';
 
 // Category Banner Images
 import homeBanner from './assets/Image/backgrounds/image 98.png';
@@ -34,6 +35,7 @@ function App() {
       case 'message': navigate('/message'); break;
       case 'orders': navigate('/orders'); break;
       case 'login': navigate('/login'); break;
+      case 'admin': navigate('/admin'); break;
       default: navigate('/'); break;
     }
   };
@@ -43,11 +45,13 @@ function App() {
   const [electronicsItems, setElectronicsItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/products')
+    fetch('http://localhost:3000/api/products?limit=20') // Fetch more for home page
       .then(res => res.json())
       .then(data => {
-        setHomeAndOutdoorItems(data.filter(item => item.category === 'home').slice(0, 8));
-        setElectronicsItems(data.filter(item => item.category === 'electronics').slice(0, 8));
+        // data.products is the array now
+        const allProducts = data.products || [];
+        setHomeAndOutdoorItems(allProducts.filter(item => item.category === 'home').slice(0, 8));
+        setElectronicsItems(allProducts.filter(item => item.category === 'electronics').slice(0, 8));
       })
       .catch(err => console.error("Error fetching products:", err));
   }, []);
@@ -92,6 +96,7 @@ function App() {
           <Route path="/message" element={<Messages setPage={setPage} />} />
           <Route path="/orders" element={<Orders setPage={setPage} />} />
           <Route path="/login" element={<Login setPage={setPage} />} />
+          <Route path="/admin" element={<Admin setPage={setPage} />} />
         </Routes>
       </main>
 

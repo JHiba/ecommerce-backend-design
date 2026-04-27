@@ -15,21 +15,31 @@ const ProductListing = ({ setPage, searchQuery }) => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('grid'); 
   const [products, setProducts] = useState([]); // This hooks into MongoDB!
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const activeFilters = ["Samsung", "Apple", "Poco", "Metallic", "4 star", "3 star"];
 
-  // Fetch from the Database whenever the Search Bar changes!
+  // Fetch from the Database whenever the Search Bar or Page changes!
   useEffect(() => {
-    // If they typed something, use our new Search Route. Otherwise, get everything!
+    // If they typed something, use our new Search Route. Otherwise, get paginated results!
     const url = searchQuery && searchQuery.trim() !== '' 
       ? `http://localhost:3000/api/products/search?q=${searchQuery}`
-      : 'http://localhost:3000/api/products';
+      : `http://localhost:3000/api/products?page=${currentPage}&limit=9`;
       
     fetch(url)
       .then(res => res.json())
-      .then(data => setProducts(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+          setTotalPages(1);
+        } else {
+          setProducts(data.products || []);
+          setTotalPages(data.totalPages || 1);
+        }
+      })
       .catch(err => console.error(err));
-  }, [searchQuery]);
+  }, [searchQuery, currentPage]);
 
 
   return (
@@ -301,17 +311,29 @@ const ProductListing = ({ setPage, searchQuery }) => {
           <div className="flex justify-end mt-8">
             <div className="flex items-center gap-3">
               <div className="flex border border-[#DEE2E7] rounded-md overflow-hidden bg-white">
-                <div className="px-3 py-2 border-r border-[#DEE2E7] cursor-pointer hover:bg-shade transition-colors flex items-center">
-                  <span className="text-secondary text-sm">Show 10</span>
-                  <ChevronDown size={14} className="ml-2" />
+                <div 
+                  className={`px-3 py-2 border-r border-[#DEE2E7] cursor-pointer text-dark flex items-center ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-shade'}`}
+                  onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                >
+                  {"<"}
                 </div>
-              </div>
-              <div className="flex border border-[#DEE2E7] rounded-md overflow-hidden bg-white">
-                <div className="px-3 py-2 border-r border-[#DEE2E7] opacity-30 cursor-not-allowed text-dark flex items-center">{"<"}</div>
-                <div className="px-4 py-2 border-r border-[#DEE2E7] bg-white hover:bg-shade font-bold text-dark text-sm cursor-pointer">1</div>
-                <div className="px-4 py-2 border-r border-[#DEE2E7] hover:bg-shade cursor-pointer text-dark text-sm transition-colors">2</div>
-                <div className="px-4 py-2 border-r border-[#DEE2E7] hover:bg-shade cursor-pointer text-dark text-sm transition-colors">3</div>
-                <div className="px-3 py-2 hover:bg-shade cursor-pointer text-dark flex items-center transition-colors shadow-sm">{">"}</div>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <div 
+                    key={page}
+                    className={`px-4 py-2 border-r border-[#DEE2E7] cursor-pointer text-sm transition-colors ${currentPage === page ? 'bg-[#EFF2F4] font-bold text-dark' : 'bg-white hover:bg-shade text-dark'}`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </div>
+                ))}
+
+                <div 
+                  className={`px-3 py-2 cursor-pointer text-dark flex items-center transition-colors shadow-sm ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-shade'}`}
+                  onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+                >
+                  {">"}
+                </div>
               </div>
             </div>
           </div>

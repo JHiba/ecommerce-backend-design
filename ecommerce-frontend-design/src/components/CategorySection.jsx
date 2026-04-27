@@ -20,6 +20,7 @@ const CategorySection = ({ title, bannerImg, items, bannerBg }) => {
         {items.map((item, index) => (
           <div
             key={index}
+            onClick={() => window.location.href = `/products/${item._id}`}
             className="p-5 border-r border-b last:border-r-0 border-[#DEE2E7] flex justify-between cursor-pointer hover:bg-white hover:shadow-[0px_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300 group h-[130px] relative hover:z-10"
           >
             <div className="flex flex-col">
