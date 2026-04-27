@@ -9,7 +9,7 @@ const Deals = ({ setPage }) => {
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || '';
     fetch(`${API_URL}/api/products?category=deal`)
       .then(res => res.json())
       .then(data => {

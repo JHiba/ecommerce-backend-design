@@ -35,8 +35,12 @@ app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Server (Conditionally start if running locally, export for Vercel)
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;

@@ -12,7 +12,7 @@ const Login = ({ setPage }) => {
     setError('');
     setSuccess('');
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || '';
     const url = isLogin 
       ? `${API_URL}/api/auth/login` 
       : `${API_URL}/api/auth/register`;

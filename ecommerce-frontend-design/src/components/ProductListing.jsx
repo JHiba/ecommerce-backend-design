@@ -23,7 +23,7 @@ const ProductListing = ({ setPage, searchQuery }) => {
   // Fetch from the Database whenever the Search Bar or Page changes!
   useEffect(() => {
     // If they typed something, use our new Search Route. Otherwise, get paginated results!
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || '';
     const url = searchQuery && searchQuery.trim() !== '' 
       ? `${API_URL}/api/products/search?q=${searchQuery}`
       : `${API_URL}/api/products?page=${currentPage}&limit=9`;

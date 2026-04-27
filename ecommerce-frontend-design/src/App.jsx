@@ -45,7 +45,7 @@ function App() {
   const [electronicsItems, setElectronicsItems] = useState([]);
 
   useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || '';
     fetch(`${API_URL}/api/products?limit=20`) // Fetch more for home page
       .then(res => res.json())
       .then(data => {
