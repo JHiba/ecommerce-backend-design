@@ -45,7 +45,8 @@ function App() {
   const [electronicsItems, setElectronicsItems] = useState([]);
 
   useEffect(() => {
-    fetch('/api/products?limit=20') // Fetch more for home page
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    fetch(`${API_URL}/api/products?limit=20`) // Fetch more for home page
       .then(res => res.json())
       .then(data => {
         // data.products is the array now

@@ -20,7 +20,8 @@ const Admin = ({ setPage }) => {
     }
 
     try {
-      const response = await fetch('/api/products', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${API_URL}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

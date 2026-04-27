@@ -12,9 +12,10 @@ const Login = ({ setPage }) => {
     setError('');
     setSuccess('');
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     const url = isLogin 
-      ? '/api/auth/login' 
-      : '/api/auth/register';
+      ? `${API_URL}/api/auth/login` 
+      : `${API_URL}/api/auth/register`;
 
     try {
       const response = await fetch(url, {
