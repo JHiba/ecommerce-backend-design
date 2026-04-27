@@ -13,8 +13,8 @@ const Login = ({ setPage }) => {
     setSuccess('');
 
     const url = isLogin 
-      ? 'http://localhost:3000/api/auth/login'
-      : 'http://localhost:3000/api/auth/register';
+      ? '/api/auth/login' 
+      : '/api/auth/register';
 
     try {
       const response = await fetch(url, {

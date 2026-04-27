@@ -24,8 +24,8 @@ const ProductListing = ({ setPage, searchQuery }) => {
   useEffect(() => {
     // If they typed something, use our new Search Route. Otherwise, get paginated results!
     const url = searchQuery && searchQuery.trim() !== '' 
-      ? `http://localhost:3000/api/products/search?q=${searchQuery}`
-      : `http://localhost:3000/api/products?page=${currentPage}&limit=9`;
+      ? `/api/products/search?q=${searchQuery}`
+      : `/api/products?page=${currentPage}&limit=9`;
       
     fetch(url)
       .then(res => res.json())

@@ -9,7 +9,7 @@ const Deals = ({ setPage }) => {
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/products?category=deal')
+    fetch('/api/products?category=deal')
       .then(res => res.json())
       .then(data => {
         const items = data.products || data;
